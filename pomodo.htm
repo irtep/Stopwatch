@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+			<!-- Fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Anton|Audiowide" rel="stylesheet">
+
+			<!-- Font Awesome-->
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+				<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+		<!-- jQuery library -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+		<!-- Latest compiled JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+		<title>Calculator</title>
+
+		<style>
+
+			body {
+
+				background-color: white; 
+
+			}
+
+			#mainSection {
+
+				position: relative;
+				
+				top: 50px;
+				width: 500px;
+				height: 400px;
+				border-radius: 5px;
+
+				background-color: black;
+				background: linear-gradient(black, #101010); /* Standard syntax (must be last) */
+				padding: 30px;
+
+				font-family: 'Audiowide', cursive;
+				font-size: 25px;
+				color: white;
+			}
+
+			.normalButton {
+
+				width: 35px;
+				height: 35px;
+				margin: 3px;
+				border-radius: 5px;
+				border-color: rgb(50,0,0);
+				text-align: center;
+				font-size: 20px;
+				background-color: red;
+				background: linear-gradient(rgb(255,0,0), rgb(70,0,0)); /* Standard syntax (must be last) */
+
+			}
+
+			.xFont {
+
+				text-shadow: 2px 2px;
+				font-size: 35px;
+				
+			}
+
+			.colorYellow {
+
+				color: yellow;
+				text-shadow: 2px 2px 8px #FFFF00;
+
+			}
+
+			.colorGreen {
+
+				color: green;
+				text-shadow: 2px 2px 8px #00FF00;
+
+			}
+
+			.colorRed {
+
+				color: red;
+				text-shadow: 2px 2px 8px #FF0000;
+
+			}			
+
+			#tiempo {
+
+				font-size: 50px;
+
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div id="mainSection" class ="container-fluid">
+
+			<i id= "light1" class= "fa fa-reorder xFont colorYellow"></i>
+			<i id= "light2"  class= "fa fa-reorder xFont colorYellow"></i>
+			<i id= "light3"  class= "fa fa-reorder xFont colorYellow"></i>
+
+			<br><br>
+			set time: 
+			<button type= "button" id= "up" class= "normalButton centered"><i class= "fa fa-toggle-up"></i></button>
+			<button type= "button" id= "down" class= "normalButton centered"><i class= "fa fa-toggle-down"></i></button>
+			<button type= "button" id= "start" class= "normalButton centered"><i class= "fa fa-flash"></i></button>
+
+			<center>
+
+				<br><br>
+				<span id= "tiempo"></span> 
+
+			</center>	
+
+
+		</div> <!-- FLUID CONTAINER ENDS-->	
+
+	</body>
+
+	<script>
+
+			let minutes = 0; // time vars, defaults zeros
+			
+			let seconds1 = 0;
+			let seconds2 = 0;
+
+			const doubleDots = " : "
+			const emptySpace = "    " // some empty spaces after
+
+
+					function setIntervalX(callback, delay) {
+						    
+						var intervalID = window.setInterval(function () {
+
+						    callback();
+
+						if (minutes === 0 && seconds1 === 0 && seconds2 === 0) {
+					
+							window.clearInterval(intervalID);
+
+							// change light colors
+							document.getElementById("light1").classList.remove("colorGreen");
+							document.getElementById("light1").classList.remove("colorYellow");	
+							document.getElementById("light1").classList.add("colorRed");
+							document.getElementById("light2").classList.remove("colorGreen");
+							document.getElementById("light2").classList.remove("colorYellow");	
+							document.getElementById("light2").classList.add("colorRed");
+							document.getElementById("light3").classList.remove("colorGreen");
+							document.getElementById("light3").classList.remove("colorYellow");	
+							document.getElementById("light3").classList.add("colorRed");
+
+						}
+
+				}, delay);
+
+			}
+
+
+
+
+			function refresh() {
+
+				document.getElementById("tiempo").innerHTML = minutes + doubleDots + seconds1 + seconds2 + emptySpace;
+
+			}
+
+
+			function timeForAction(butID) { // event listener fires this
+
+				console.log("time for some action with value:",butID);
+
+				switch (butID) {
+
+					case "up":
+
+						if (seconds2 < 9) {
+
+							seconds2++;
+
+						} else if (seconds2 === 9 && seconds1 < 5){
+
+							seconds2 = 0;
+							seconds1++;
+
+						} else {
+
+							seconds1 = 0;
+							seconds2 = 0;
+							minutes++;
+
+						}
+
+						refresh();
+
+					break;
+
+					case "down":
+
+						if (seconds2 > 0) {
+
+							seconds2--;
+
+						} else if (seconds2 === 0 && seconds1 > 0){
+
+							seconds2 = 9;
+							seconds1--;
+
+						} else if (minutes === 0 && seconds1 === 0 && seconds2 === 0) {	
+
+							return;
+
+						} else if (minutes > 0 && seconds1 === 0 && seconds2 === 0){
+
+							minutes--;
+							seconds2 = 9;
+							seconds1 = 5;
+
+						} else {
+							
+							seconds1 = 5;
+							seconds2 = 9;
+							minutes--;
+
+						}
+
+						refresh();
+
+
+					break;
+
+					case "start":
+
+							// change light colors
+							document.getElementById("light1").classList.remove("colorRed");
+							document.getElementById("light1").classList.remove("colorYellow");	
+							document.getElementById("light1").classList.add("colorGreen");
+							document.getElementById("light2").classList.remove("colorRed");
+							document.getElementById("light2").classList.remove("colorYellow");	
+							document.getElementById("light2").classList.add("colorGreen");
+							document.getElementById("light3").classList.remove("colorRed");
+							document.getElementById("light3").classList.remove("colorYellow");	
+							document.getElementById("light3").classList.add("colorGreen");
+																		
+			
+						setIntervalX(function () { // activate the clock
+ 			 			   
+							timeForAction("down");
+
+						}, 1000);			// every 1 seconds
+						
+					break;
+
+					default: console.log("butID not found ", butID);
+
+				} // switch ends
+
+
+			}  // time for action ends
+
+			 $(document).ready(() => {
+
+				 	refresh();
+
+					$(":button").click(function (event) {  // event listener for buttons.
+	        		console.log("event listener for button activated");
+	        	
+	        		timeForAction(this.id); // fires timeForAction with id of button clicked.
+
+	        		});
+
+			}) // on load ends
+
+	</script>
+
+</html>
